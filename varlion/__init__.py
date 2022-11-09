@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), "."))
 
+from pyfiglet import Figlet
 import logging
 from logging import (StreamHandler, FileHandler, Formatter, basicConfig, INFO)
 import MetaTrader5 as mt5
@@ -9,6 +10,8 @@ import MetaTrader5 as mt5
 from constant import ROOT_DIR
 from config import ACCOUNT_NUMBER, PASSWORD, SERVER
 from message_control import send_message
+
+print(Figlet(font="slant").renderText("Varlion"))
 
 # ロギング設定
 LOG_LEVEL = INFO
