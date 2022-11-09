@@ -16,8 +16,11 @@ UNTIL = 10
 SHORT_SMA = 5
 LONG_SMA = 10
 
+# Message
+LINE_NOTIFY_TOKEN = ""
+LINE_NOTIFY_PREFIX = ""
+
 # General
 SERVER_TIMEZONE = pytz.timezone("America/New_York")
 USE_EXTERNAL_SOURCE = True
 SOUCE_URL = ""
-LINE_PREFIX = ""
