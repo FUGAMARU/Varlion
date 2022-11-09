@@ -3,6 +3,9 @@ import time
 import datetime
 
 from constant import JST
+from file_operation import perpetuate_state
+from order_action import entry, settlement
+from common_function import is_available_time
 import gv
 
 
@@ -18,7 +21,19 @@ def main() -> None:
         # 5分ごとの処理
         if minute % 5 == 0 and minute != gv.lastProcessed:
             print(f"[{dt}] 仕事中！ Σ( ºωº )")
-            # エントリーや決済など...
+
+            # 範囲時間外に前営業日にエントリーした通貨ペアの履歴を消す
+            if not is_available_time() and gv.entried:
+                gv.entried = []
+                perpetuate_state()
+
+            # 新規エントリー用処理
+            # if function.isOnTime(int(time.time())) and function.isWeekday(int(time.time())):  # 指定時間内かつマーケット平日かどうか  -> (!Todo) order_action側に判定ロジックを移動する
+                entry()
+
+            # 決済用処理(SMAの反転チェック)
+            # if gv.positions:  # 持っているポジションがあるか -> (!Todo) order_action側に判定ロジックを移動する
+                settlement()
 
             gv.lastProcessed = minute
 

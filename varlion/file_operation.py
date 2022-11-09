@@ -1,14 +1,12 @@
 import json
 
 from constant import ROOT_DIR
+import gv
 
 
-def get_config() -> dict[str, str | int]:
-    """ 設定ファイルから値を取得する
-    Returns
-    -------
-    dict[str, str | int]
-        設定
-    """
-    with open(f"{ROOT_DIR}/config.json") as file:
-        return json.load(file)
+def perpetuate_state() -> None:
+    """ ポジションの保有状況を永続化データーとしてファイルに出力する """
+
+    with open(f"{ROOT_DIR}/persistence.json", "w") as file:
+        dumpData = {"entried": gv.entried, "positions": gv.positions}
+        json.dump(dumpData, file, indent=4)
