@@ -3,10 +3,10 @@ import time
 import datetime
 
 from constant import JST
+from mt5_api_function import check_losscut_executed
+from common_function import is_available_time
 from file_operation import perpetuate_state
 from order_action import entry, settlement
-from common_function import is_available_time
-from mt5_api_function import check_losscut_executed
 import gv
 
 
@@ -28,13 +28,11 @@ def main() -> None:
                 gv.entried = []
                 perpetuate_state()
 
-            # 新規エントリー用処理
-            # if function.isOnTime(int(time.time())) and function.isWeekday(int(time.time())):  # 指定時間内かつマーケット平日かどうか  -> (!Todo) order_action側に判定ロジックを移動する
-                entry()
+            entry()
 
             # 決済用処理(SMAの反転チェック)
             # if gv.positions:  # 持っているポジションがあるか -> (!Todo) order_action側に判定ロジックを移動する
-                settlement()
+            settlement()
 
             gv.lastProcessed = minute
 
