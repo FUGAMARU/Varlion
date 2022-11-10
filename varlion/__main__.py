@@ -6,6 +6,7 @@ from constant import JST
 from file_operation import perpetuate_state
 from order_action import entry, settlement
 from common_function import is_available_time
+from mt5_api_function import check_losscut_executed
 import gv
 
 
@@ -16,7 +17,7 @@ def main() -> None:
 
         # 5秒ごとの処理
         if second % 5 == 0:
-            print("5秒ごとに損切りに引っかかったかチェックする")
+            check_losscut_executed()
 
         # 5分ごとの処理
         if minute % 5 == 0 and minute != gv.lastProcessed:
