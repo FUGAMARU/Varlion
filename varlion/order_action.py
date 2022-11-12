@@ -2,7 +2,7 @@ from pprint import pprint
 import logging
 
 from common_function import is_open_market, is_available_time, get_currency_strength, get_symbol, check_deviation, check_sma_state, get_direction
-from mt5_api_function import send_order, is_order_done
+from mt5_api_function import send_order, is_order_done, get_sma, send_settlement
 from message_control import send_message
 from file_operation import perpetuate_state
 import gv
@@ -53,4 +53,26 @@ def entry() -> None:
 
 def settlement() -> None:
     """ 保有ポジションがあれば決済を試行する """
-    print("決済関連処理")
+
+    if not gv.positions:
+        return
+
+    for k in list(gv.positions.keys()):
+        v = gv.positions[k]
+        sma = get_sma(k)
+
+        if (v["direction"] == "LONG" and sma[0] >= sma[1]) or (v["direction"] == "SHORT" and sma[0] <= sma[1]):  # SMAが反転していたら
+            orderResult = send_settlement(k, v)
+
+            if is_order_done(orderResult):
+                del gv.positions[k]
+                perpetuate_state()
+
+                logging.info(f"[#{v['ticket']}] {k}の{v['direction']}を決済しました ({orderResult.price} * {orderResult.volume}Lots)")
+                send_message(f"[#{v['ticket']}] {k}の{v['direction']}を決済しました ({orderResult.price} * {orderResult.volume}Lots)")
+            else:
+                logging.error(f"[#{v['ticket']}] {k}の{v['direction']}の決済に失敗しました code={orderResult.retcode}, message={orderResult.comment}")
+                logging.error(orderResult)
+                send_message(f"[#{v['ticket']}] {k}の{v['direction']}の決済に失敗しました code={orderResult.retcode}, message={orderResult.comment}")
+
+            logging.info(pprint(gv.positions))

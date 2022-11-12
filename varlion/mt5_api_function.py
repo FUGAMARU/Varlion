@@ -163,6 +163,46 @@ def send_order(symbol: str, direction: str) -> dict[str, any]:
     return res
 
 
+def send_settlement(symbol: str, position_info: dict[str, any]) -> dict[str, any]:
+    """決済注文を出す
+
+    Parameters
+    ----------
+    symbol:
+        シンボル
+    position_info: dict[str, any]
+        ポジション情報
+
+    Returns
+    -------
+    dict[str, any]
+        MqlTradeResult型の辞書 (https://www.mql5.com/ja/docs/constants/structures/mqltraderesult)
+    """
+
+    order_type: any
+    price: float
+    if position_info["direction"] == "LONG":
+        order_type = mt5.ORDER_TYPE_SELL
+        price = get_current_rate(symbol, "BID")
+    else:
+        order_type = mt5.ORDER_TYPE_BUY
+        price = get_current_rate(symbol, "ASK")
+
+    res = mt5.order_send({
+        "action": mt5.TRADE_ACTION_DEAL,  # 成行注文
+        "magic": 20707000,  # マジックナンバー(用途不明だけど一応指定)
+        "position": position_info["ticket"],  # チケット番号
+        "symbol": symbol,
+        "price": price,  # 注文価格(成行なのに指定しないといけない理由は不明)
+        "volume": position_info["lot"],  # ロット数
+        "deviation": 100,  # 許容スリッページ(ポイント)
+        "type": order_type,  # 決済注文
+        "type_filling": mt5.ORDER_FILLING_IOC if FILLING_TYPE == "IOC" else mt5.ORDER_FILLING_FOK  # 注文タイプ
+    })
+
+    return res
+
+
 def is_order_done(order_result: tuple) -> bool:
     """ オーダー結果のデーターを元に、オーダーが正常に完了したか確認する
 

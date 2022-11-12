@@ -30,8 +30,6 @@ def main() -> None:
 
             entry()
 
-            # 決済用処理(SMAの反転チェック)
-            # if gv.positions:  # 持っているポジションがあるか -> (!Todo) order_action側に判定ロジックを移動する
             settlement()
 
             gv.lastProcessed = minute
