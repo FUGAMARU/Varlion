@@ -7,6 +7,7 @@ from mt5_api_function import check_losscut_executed
 from common_function import is_available_time
 from file_operation import perpetuate_state
 from order_action import entry, settlement
+from message_control import send_message
 import gv
 
 
@@ -20,7 +21,7 @@ def main() -> None:
             check_losscut_executed()
 
         # 5分ごとの処理
-        if minute % 5 == 0 and minute != gv.lastProcessed:
+        if minute % 5 == 0 and minute != gv.lastProcessed5m:
             print(f"[{dt}] 仕事中！ Σ( ºωº )")
 
             # 範囲時間外に前営業日にエントリーした通貨ペアの履歴を消す
@@ -32,7 +33,12 @@ def main() -> None:
 
             settlement()
 
-            gv.lastProcessed = minute
+            gv.lastProcessed5m = minute
+
+        # 1時間ごとの処理
+        if minute == 0 and minute != gv.lastProcessed1h:
+            # 現在のポジション保有状況を送信する
+            send_message(f"本日の累計エントリー回数: {len(gv.entried)}", "STATUS")
 
     # スケジューラー
     schedule.every(1).seconds.do(every1sec)

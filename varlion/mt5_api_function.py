@@ -52,7 +52,7 @@ def check_losscut_executed() -> None:
             perpetuate_state()
 
             logging.info(f"{symbol}が損切り決済されました")
-            send_message(f"{symbol}が損切り決済されました")
+            send_message(f"{symbol}が損切り決済されました", "STOPLOSS")
 
 
 def get_sma(symbol: str) -> list[float]:

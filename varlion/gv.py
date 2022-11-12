@@ -1,3 +1,4 @@
-lastProcessed = 60
+lastProcessed5m = 60
+lastProcessed1h = 60
 positions = {}
 entried = []

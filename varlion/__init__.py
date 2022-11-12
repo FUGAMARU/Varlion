@@ -42,4 +42,4 @@ logging.info(f"ユーザー認証に成功しました(接続先サーバー: {S
 logging.info("Varlionが正常に起動しました")
 logging.info("モニタリングを開始します")
 
-send_message("Varlionが起動しました")
+send_message("Varlionが起動しました", "STARTUP")

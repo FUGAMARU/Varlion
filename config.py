@@ -19,6 +19,7 @@ LONG_SMA = 10
 # Message
 LINE_NOTIFY_TOKEN = ""
 LINE_NOTIFY_PREFIX = ""
+ALLOWED_MESSAGE_TYPES = ["STARTUP", "ERROR", "STOPLOSS", "ORDER", "STATUS"]
 
 # General
 SERVER_TIMEZONE = pytz.timezone("America/New_York")

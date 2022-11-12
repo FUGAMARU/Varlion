@@ -38,17 +38,17 @@ def entry() -> None:
                     perpetuate_state()
 
                     logging.info(f"[#{order_result.order}] {symbol}を{direction}しました ({order_result.price} * {order_result.volume}Lots)")
-                    send_message(f"[#{order_result.order}] {symbol}を{direction}しました ({order_result.price} * {order_result.volume}Lots)")
+                    send_message(f"[#{order_result.order}] {symbol}を{direction}しました ({order_result.price} * {order_result.volume}Lots)", "ORDER")
 
                     logging.info(order_result)
+
+                    logging.info(f"{k1}({v1}) vs {k2}({v2})")
+                    send_message(f"{k1}({v1}) vs {k2}({v2})", "ORDER")
+                    logging.info(pprint(gv.positions))
                 else:
                     logging.error(f"{symbol}の{direction}に失敗しました code={order_result.retcode}, message={order_result.comment}")
                     logging.error(order_result)
-                    send_message(f"{symbol}の{direction}に失敗しました code={order_result.retcode}, message={order_result.comment}")
-
-                    logging.info(f"{k1}({v1}) vs {k2}({v2})")
-                    send_message(f"{k1}({v1}) vs {k2}({v2})")
-                    logging.info(pprint(gv.positions))
+                    send_message(f"{symbol}の{direction}に失敗しました code={order_result.retcode}, message={order_result.comment}", "ERROR")
 
 
 def settlement() -> None:
@@ -69,10 +69,10 @@ def settlement() -> None:
                 perpetuate_state()
 
                 logging.info(f"[#{v['ticket']}] {k}の{v['direction']}を決済しました ({orderResult.price} * {orderResult.volume}Lots)")
-                send_message(f"[#{v['ticket']}] {k}の{v['direction']}を決済しました ({orderResult.price} * {orderResult.volume}Lots)")
+                send_message(f"[#{v['ticket']}] {k}の{v['direction']}を決済しました ({orderResult.price} * {orderResult.volume}Lots)", "ORDER")
             else:
                 logging.error(f"[#{v['ticket']}] {k}の{v['direction']}の決済に失敗しました code={orderResult.retcode}, message={orderResult.comment}")
                 logging.error(orderResult)
-                send_message(f"[#{v['ticket']}] {k}の{v['direction']}の決済に失敗しました code={orderResult.retcode}, message={orderResult.comment}")
+                send_message(f"[#{v['ticket']}] {k}の{v['direction']}の決済に失敗しました code={orderResult.retcode}, message={orderResult.comment}", "ERROR")
 
             logging.info(pprint(gv.positions))

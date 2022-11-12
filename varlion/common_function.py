@@ -104,8 +104,8 @@ def get_currency_strength() -> dict[str, float] | None:
             except:
                 logging.error("通貨強弱データーの処理エラーが発生しました")
                 logging.error("3秒後に再試行します")
-                send_message("通貨強弱データーの処理エラーが発生しました")
-                send_message("3秒後に再試行します")
+                send_message("通貨強弱データーの処理エラーが発生しました", "ERROR")
+                send_message("3秒後に再試行します", "ERROR")
                 time.sleep(3)
                 continue
 
